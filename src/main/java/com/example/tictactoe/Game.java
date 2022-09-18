@@ -13,12 +13,21 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-public class HelloController implements Initializable {
+/**
+ * Game class, this class is where everything happens
+ * in this class has the functions, setPlayerIcon(), onMouseClicked(), ComputersPlay(), CheckBestPlay() and CheckWin()
+ */
+public class Game {
     @FXML
     private AnchorPane AnchorPane00, AnchorPane01, AnchorPane02, AnchorPane10, AnchorPane11, AnchorPane12, AnchorPane20, AnchorPane21, AnchorPane22;
 
     String Player, Bot;
     Color playercolor, botcolor;
+
+    /**
+     * This Function sets player icon by passing a String with icon name
+     * @param player
+     */
     public void setPlayerIcon(String player){
         if(player.equals("TIMES")){
             Player = player;
@@ -30,6 +39,27 @@ public class HelloController implements Initializable {
 
     }
 
+    /**
+     * This Function sets player icon by passing a color value
+     * @param color
+     */
+
+    public void setPlayerColor(Color color) {
+        if (color.equals(Color.BLUE)) {
+            playercolor = color;
+            botcolor = Color.RED;
+        }else{
+            playercolor = color;
+            botcolor = Color.BLUE;
+        }
+    }
+
+    /**
+     * This Fuction happens when the player clicks somewhere in the screen, its check if where the player clicked has alredy
+     * an icon, if so it doesn't do anything otherwise it puts the player icon where the player clicked, than check if the player won
+     * otherwise runs the ComputerPlay()
+     * @param mouseEvent
+     */
     public void onMouseClicked(MouseEvent mouseEvent) {
         Node source = (Node) mouseEvent.getSource();
         AnchorPane quadrante = (AnchorPane) source;
@@ -67,6 +97,12 @@ public class HelloController implements Initializable {
 
     }
 
+    /**
+     * This Fuction when is called runs CheckBestPlay() if returns null, then it gets a random anchorpane from the list created
+     * and play on the random anchorpane, and then check if it was a win, if it does than the game disable the function
+     * onMouseClicked()
+     *
+     */
     public void ComputersPlay() {
         AnchorPane[] anchorPanes = {AnchorPane00, AnchorPane01, AnchorPane02, AnchorPane10, AnchorPane11, AnchorPane12, AnchorPane20, AnchorPane21, AnchorPane22};
         ArrayList<AnchorPane> possibilites = new ArrayList<>();
@@ -97,20 +133,26 @@ public class HelloController implements Initializable {
                     return;
                 }
             }else{
-                System.out.println("Random1");
                 Random random = new Random();
                 int rad = random.nextInt(possibilites.size());
                 possibilites.get(rad).getChildren().add(fontAwesomeIconView);
                 return;
             }
         }else{
-            System.out.println("Random2");
             Random random = new Random();
             int rad = random.nextInt(possibilites.size());
             possibilites.get(rad).getChildren().add(fontAwesomeIconView);
             return;
         }
     }
+
+    /**
+     * This Fuction was the most complicated to make, and it was based on CheckWin(), it checks if on the grid has an array of the length 2 with the same value
+     * if it does have, and the value is the same as the bot then return the anchorpane for the win, in case of any bots plays
+     * forms an array of two, then its check if there's an array of player plays that form an array of two, then returns the
+     * anchorpane value so the player can't win on the next round
+     * @return AnchorPosition
+     */
     public AnchorPane CheckBestPlay() {
         AnchorPane[][] anchorPanesgrid = {{AnchorPane00, AnchorPane10, AnchorPane20}, {AnchorPane01, AnchorPane11, AnchorPane21}, {AnchorPane02, AnchorPane12, AnchorPane22}};
         for (int i = 0; i < 3; i++) {
@@ -367,6 +409,13 @@ public class HelloController implements Initializable {
         }
         return null;
     }
+
+    /**
+     * This Fuction Checks if the game is over, basically transforming the grind in a matrix and checking if
+     * there's a row, column, or diagonal fulfilled with the same value, its return a boolean value
+     * true or false if its true someone won, if false the game continues.
+     * @return Win
+     */
     public Boolean CheckWin() {
         AnchorPane[][] anchorPanesgrid = {{AnchorPane00, AnchorPane10, AnchorPane20}, {AnchorPane01, AnchorPane11, AnchorPane21}, {AnchorPane02, AnchorPane12, AnchorPane22}};
         for (int i = 0; i < 3; i++) {
@@ -413,19 +462,4 @@ public class HelloController implements Initializable {
         return false;
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-
-    }
-
-    public void setPlayerColor(Color color) {
-        if (color.equals(Color.BLUE)) {
-            playercolor = color;
-            botcolor = Color.RED;
-        }else{
-            playercolor = color;
-            botcolor = Color.BLUE;
-        }
-    }
 }
