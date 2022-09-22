@@ -20,7 +20,6 @@ import java.util.ResourceBundle;
 public class Game {
     @FXML
     private AnchorPane AnchorPane00, AnchorPane01, AnchorPane02, AnchorPane10, AnchorPane11, AnchorPane12, AnchorPane20, AnchorPane21, AnchorPane22;
-
     String Player, Bot;
     Color playercolor, botcolor;
 
@@ -64,15 +63,15 @@ public class Game {
         Node source = (Node) mouseEvent.getSource();
         AnchorPane quadrante = (AnchorPane) source;
         if (quadrante.getChildren().isEmpty()) {
-            FontAwesomeIconView fontAwesomeIconView = new FontAwesomeIconView();
-            fontAwesomeIconView.setSize("100");
-            fontAwesomeIconView.setGlyphName(Player);
-            fontAwesomeIconView.setFill(playercolor);
-            AnchorPane.setBottomAnchor(fontAwesomeIconView, 0.0);
-            AnchorPane.setTopAnchor(fontAwesomeIconView, 0.0);
-            AnchorPane.setLeftAnchor(fontAwesomeIconView, 0.0);
-            AnchorPane.setRightAnchor(fontAwesomeIconView, 0.0);
-            quadrante.getChildren().add(fontAwesomeIconView);
+            FontAwesomeIconView player = new FontAwesomeIconView();
+            player.setSize("100");
+            player.setGlyphName(Player);
+            player.setFill(playercolor);
+            AnchorPane.setBottomAnchor(player, 0.0);
+            AnchorPane.setTopAnchor(player, 0.0);
+            AnchorPane.setLeftAnchor(player, 0.0);
+            AnchorPane.setRightAnchor(player, 0.0);
+            quadrante.getChildren().add(player);
             AnchorPane[] anchorPanes = {AnchorPane00, AnchorPane01, AnchorPane02, AnchorPane10, AnchorPane11, AnchorPane12, AnchorPane20, AnchorPane21, AnchorPane22};
             if(CheckWin()){
                 for (AnchorPane anchorPane :anchorPanes) {
@@ -111,39 +110,38 @@ public class Game {
                     possibilites.add(anchorPane);
             }
         }
-        FontAwesomeIconView fontAwesomeIconView = new FontAwesomeIconView();
-        fontAwesomeIconView.setSize("100");
-        fontAwesomeIconView.setGlyphName(Bot);
-        fontAwesomeIconView.setFill(botcolor);
-        AnchorPane.setBottomAnchor(fontAwesomeIconView, 0.0);
-        AnchorPane.setTopAnchor(fontAwesomeIconView, 0.0);
-        AnchorPane.setLeftAnchor(fontAwesomeIconView, 0.0);
-        AnchorPane.setRightAnchor(fontAwesomeIconView, 0.0);
-        if(CheckBestPlay()!=null) {
-            if(CheckBestPlay().getChildren().isEmpty()) {
-                CheckBestPlay().getChildren().add(fontAwesomeIconView);
-                if (CheckWin()) {
-                    for (AnchorPane anchorPane :anchorPanes) {
-                        anchorPane.setOnMouseClicked(null);
-                    }if(Player.equals("TIMES")){
-                        System.out.println("Vitória do circulo");
-                    }else{
-                        System.out.println("Vitória do X");
-                    }
-                    return;
+        FontAwesomeIconView bot=new FontAwesomeIconView();
+        bot.setSize("100");
+        bot.setGlyphName(Bot);
+        bot.setFill(botcolor);
+        AnchorPane.setBottomAnchor(bot, 0.0);
+        AnchorPane.setTopAnchor(bot, 0.0);
+        AnchorPane.setLeftAnchor(bot, 0.0);
+        AnchorPane.setRightAnchor(bot, 0.0);
+        AnchorPane bestPlay =  CheckBestPlay(Bot);
+        if(bestPlay==null){
+            bestPlay = CheckBestPlay(Player);
+        }
+        if(bestPlay!=null) {
+            bestPlay.getChildren().add(bot);
+            if (CheckWin()) {
+                for (AnchorPane anchorPane : anchorPanes) {
+                    anchorPane.setOnMouseClicked(null);
                 }
-            }else{
-                Random random = new Random();
-                int rad = random.nextInt(possibilites.size());
-                possibilites.get(rad).getChildren().add(fontAwesomeIconView);
+                if (Player.equals("TIMES")) {
+                    System.out.println("Vitória do circulo");
+                } else {
+                    System.out.println("Vitória do X");
+                }
                 return;
             }
         }else{
-            Random random = new Random();
-            int rad = random.nextInt(possibilites.size());
-            possibilites.get(rad).getChildren().add(fontAwesomeIconView);
-            return;
+                Random random = new Random();
+                int rad = random.nextInt(possibilites.size());
+                possibilites.get(rad).getChildren().add(bot);
+                System.out.println("RANDOM");
         }
+
     }
 
     /**
@@ -153,252 +151,82 @@ public class Game {
      * anchorpane value so the player can't win on the next round
      * @return AnchorPosition
      */
-    public AnchorPane CheckBestPlay() {
+    public AnchorPane CheckBestPlay(String text) {
         AnchorPane[][] anchorPanesgrid = {{AnchorPane00, AnchorPane10, AnchorPane20}, {AnchorPane01, AnchorPane11, AnchorPane21}, {AnchorPane02, AnchorPane12, AnchorPane22}};
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                FontAwesomeIconView fontAwesomeIconView, fontAwesomeIconView1;
-                if (!anchorPanesgrid[i][j].getChildren().isEmpty()) {
-                    fontAwesomeIconView = (FontAwesomeIconView) anchorPanesgrid[i][j].getChildren().get(0);
-                    if(fontAwesomeIconView.getGlyphName().equals(Player)){
-                        if (i == 0 && j == 0) {
-                            if (!(anchorPanesgrid[i + 1][j + 1].getChildren().isEmpty()) && (anchorPanesgrid[i + 2][j + 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i+1][j+1].getChildren().get(0);
-                                if(fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())){
-                                    return anchorPanesgrid[i+2][j+2];
-                                }
-                            }
-                        }if (i == 2 && j == 0) {
-                            if (!(anchorPanesgrid[i - 1][j + 1].getChildren().isEmpty()) && (anchorPanesgrid[i - 2][j + 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i-1][j+1].getChildren().get(0);
-                                if(fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())){
-                                    return anchorPanesgrid[i-2][j+2];
-                                }
-                            }
-                        }if (i == 0 && j == 2) {
-                            if (!(anchorPanesgrid[i + 1][j - 1].getChildren().isEmpty()) && (anchorPanesgrid[i + 2][j - 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i+1][j-1].getChildren().get(0);
-                                if(fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())){
-                                    return anchorPanesgrid[i+2][j-2];
-                                }
-                            }
-                        }if (i == 2 && j == 2) {
-                            if (!(anchorPanesgrid[i - 1][j - 1].getChildren().isEmpty()) && (anchorPanesgrid[i - 2][j - 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i-1][j-1].getChildren().get(0);
-                                if(fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())){
-                                    return anchorPanesgrid[i-2][j-2];
-                                }
-                            }
-                        }if (j == 0) {
-                            if (!(anchorPanesgrid[i][j + 1].getChildren().isEmpty()) && (anchorPanesgrid[i][j + 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i][j+1].getChildren().get(0);
-                                if(fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())){
-                                    return anchorPanesgrid[i][j+2];
-                                }
-                            }
-                        }if (i == 0) {
-                            if (!(anchorPanesgrid[i + 1][j].getChildren().isEmpty()) && (anchorPanesgrid[i + 2][j].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i+1][j].getChildren().get(0);
-                                if(fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())){
-                                    return anchorPanesgrid[i+2][j];
-                                }
-                            }
-                        }
-                        if (j == 2) {
-                            if (!(anchorPanesgrid[i][j - 1].getChildren().isEmpty()) && (anchorPanesgrid[i][j - 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i][j-1].getChildren().get(0);
-                                if(fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())){
-                                    return anchorPanesgrid[i][j-2];
-                                }
-                            }
-                        }if (i == 2) {
-                            if (!(anchorPanesgrid[i - 1][j].getChildren().isEmpty()) && (anchorPanesgrid[i - 2][j].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i-1][j].getChildren().get(0);
-                                if(fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())){
-                                    return anchorPanesgrid[i-2][j];
-                                }
-                            }
-                        }
-                    }
-                    else {
-                        if (i == 0 && j == 0) {
-                            if (!(anchorPanesgrid[i + 1][j + 1].getChildren().isEmpty()) && (anchorPanesgrid[i + 2][j + 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i + 1][j + 1].getChildren().get(0);
-                                if (fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())) {
+        for (int i = 0; i < 3; i++) { //line
+            for (int j = 0; j < 3; j++) { //column
+                if(!anchorPanesgrid[i][j].getChildren().isEmpty()){
+                    if(((FontAwesomeIconView)anchorPanesgrid[i][j].getChildren().get(0)).getGlyphName().equals(text)) {
+                        if(i==0 && j==0 && !anchorPanesgrid[i+1][j+1].getChildren().isEmpty()){//diagonal from up to down end
+                            if (((FontAwesomeIconView)anchorPanesgrid[i][j].getChildren().get(0)).getGlyphName().equals(((FontAwesomeIconView)anchorPanesgrid[i + 1][j + 1].getChildren().get(0)).getGlyphName())) {
+                                if (anchorPanesgrid[i + 2][j + 2].getChildren().isEmpty()) {
                                     return anchorPanesgrid[i + 2][j + 2];
                                 }
                             }
-                        }
-                        if (i == 2 && j == 0) {
-                            if (!(anchorPanesgrid[i - 1][j + 1].getChildren().isEmpty()) && (anchorPanesgrid[i - 2][j + 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i - 1][j + 1].getChildren().get(0);
-                                if (fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())) {
+                        }if ((i == 0 && j == 0 && !anchorPanesgrid[i + 2][j + 2].getChildren().isEmpty())) {//diagonal from up to down middle
+                            if (((FontAwesomeIconView)anchorPanesgrid[i][j].getChildren().get(0)).getGlyphName().equals(((FontAwesomeIconView)anchorPanesgrid[i + 2][j + 2].getChildren().get(0)).getGlyphName())) {
+                                if( anchorPanesgrid[i + 1][j + 1].getChildren().isEmpty()) {
+                                    return anchorPanesgrid[i + 1][j + 1];
+                                }
+                            }
+                        }if ((i == 1 && j == 1 && !anchorPanesgrid[i + 1][j + 1].getChildren().isEmpty())) {//diagonal from up to down start
+                            if (((FontAwesomeIconView)anchorPanesgrid[i][j].getChildren().get(0)).getGlyphName().equals(((FontAwesomeIconView)anchorPanesgrid[i + 1][j + 1].getChildren().get(0)).getGlyphName())) {
+                                if(anchorPanesgrid[i - 1][j - 1].getChildren().isEmpty()) {
+                                    return anchorPanesgrid[i - 1][j - 1];
+                                }
+                            }
+                        }if(i==2 && j==0 && !anchorPanesgrid[i-1][j+1].getChildren().isEmpty()){//diagonal from down to up end
+                            if (((FontAwesomeIconView)anchorPanesgrid[i][j].getChildren().get(0)).getGlyphName().equals(((FontAwesomeIconView)anchorPanesgrid[i - 1][j + 1].getChildren().get(0)).getGlyphName())) {
+                                if(anchorPanesgrid[i - 2][j + 2].getChildren().isEmpty()) {
                                     return anchorPanesgrid[i - 2][j + 2];
                                 }
                             }
-                        }if (i == 0 && j == 2) {
-                            if (!(anchorPanesgrid[i + 1][j - 1].getChildren().isEmpty()) && (anchorPanesgrid[i + 2][j - 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i + 1][j - 1].getChildren().get(0);
-                                if (fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())) {
-                                    return anchorPanesgrid[i + 2][j - 2];
+                        }if ((i == 2 && j == 0 && !anchorPanesgrid[i - 2][j + 2].getChildren().isEmpty())) {//diagonal from down to up middle
+                            if (((FontAwesomeIconView)anchorPanesgrid[i][j].getChildren().get(0)).getGlyphName().equals(((FontAwesomeIconView)anchorPanesgrid[i - 2][j + 2].getChildren().get(0)).getGlyphName())) {
+                                if(anchorPanesgrid[i - 1][j + 1].getChildren().isEmpty()) {
+                                    return anchorPanesgrid[i - 1][j + 1];
                                 }
                             }
-                        }if (i == 2 && j == 2) {
-                            if (!(anchorPanesgrid[i - 1][j - 1].getChildren().isEmpty()) && (anchorPanesgrid[i - 2][j - 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i-1][j-1].getChildren().get(0);
-                                if(fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())){
-                                    return anchorPanesgrid[i-2][j-2];
+                        }if ((i == 1 && j == 1 && !anchorPanesgrid[i - 1][j + 1].getChildren().isEmpty())) {//diagonal from down to up start
+                            if (((FontAwesomeIconView)anchorPanesgrid[i][j].getChildren().get(0)).getGlyphName().equals(((FontAwesomeIconView)anchorPanesgrid[i - 1][j + 1].getChildren().get(0)).getGlyphName())) {
+                                if(anchorPanesgrid[i + 1][j - 1].getChildren().isEmpty()) {
+                                    return anchorPanesgrid[i + 1][j - 1];
                                 }
                             }
-                        }if (j == 0) {
-                            if (!(anchorPanesgrid[i][j + 1].getChildren().isEmpty()) && (anchorPanesgrid[i][j + 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i][j + 1].getChildren().get(0);
-                                if (fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())) {
+                        }if (j == 0 && !anchorPanesgrid[i][j + 1].getChildren().isEmpty()) {//row at end
+                            if (((FontAwesomeIconView)anchorPanesgrid[i][j].getChildren().get(0)).getGlyphName().equals(((FontAwesomeIconView)anchorPanesgrid[i][j + 1].getChildren().get(0)).getGlyphName())) {
+                                if(anchorPanesgrid[i][j + 2].getChildren().isEmpty()) {
                                     return anchorPanesgrid[i][j + 2];
                                 }
                             }
-                        }
-                        if (i == 0) {
-                            if (!(anchorPanesgrid[i + 1][j].getChildren().isEmpty()) && (anchorPanesgrid[i + 2][j].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i + 1][j].getChildren().get(0);
-                                if (fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())) {
-                                    return anchorPanesgrid[i + 2][j];
-                                }
-                            }
-                        }if (j == 2) {
-                            if (!(anchorPanesgrid[i][j - 1].getChildren().isEmpty()) && (anchorPanesgrid[i][j - 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i][j - 1].getChildren().get(0);
-                                if (fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())) {
-                                    return anchorPanesgrid[i][j - 2];
-                                }
-                            }
-                        }
-                        if (i == 2) {
-                            if (!(anchorPanesgrid[i - 1][j].getChildren().isEmpty()) && (anchorPanesgrid[i - 2][j].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i - 1][j].getChildren().get(0);
-                                if (fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())) {
-                                    return anchorPanesgrid[i - 2][j];
-                                }
-                            }
-                        }
-                    }
-                    if(fontAwesomeIconView.getGlyphName().equals(Bot)){
-                        if (i == 0 && j == 0) {
-                            if ((anchorPanesgrid[i + 1][j + 1].getChildren().isEmpty()) && !(anchorPanesgrid[i + 2][j + 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i + 2][j + 2].getChildren().get(0);
-                                if(fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())){
-                                    return anchorPanesgrid[i + 1][j + 1];
-                                }
-                            }
-                        }if (i == 2 && j == 0) {
-                            if ((anchorPanesgrid[i - 1][j + 1].getChildren().isEmpty()) && !(anchorPanesgrid[i - 2][j + 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i - 2][j + 2].getChildren().get(0);
-                                if(fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())){
-                                    return anchorPanesgrid[i - 1][j + 1];
-                                }
-                            }
-                        }if (i == 0 && j == 2) {
-                            if ((anchorPanesgrid[i + 1][j - 1].getChildren().isEmpty()) && !(anchorPanesgrid[i + 2][j - 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i + 2][j - 2].getChildren().get(0);
-                                if(fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())){
-                                    return anchorPanesgrid[i + 1][j - 1];
-                                }
-                            }
-                        }if (i == 2 && j == 2) {
-                            if ((anchorPanesgrid[i - 1][j - 1].getChildren().isEmpty()) && !(anchorPanesgrid[i - 2][j - 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i - 2][j - 2].getChildren().get(0);
-                                if(fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())){
-                                    return anchorPanesgrid[i - 1][j - 1];
-                                }
-                            }
-                        }if (j == 0) {
-                            if ((anchorPanesgrid[i][j + 1].getChildren().isEmpty()) && !(anchorPanesgrid[i][j + 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i][j + 2].getChildren().get(0);
-                                if(fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())){
+                        }if (j == 0 && !anchorPanesgrid[i][j + 2].getChildren().isEmpty()) {//row at middle
+                            if (((FontAwesomeIconView)anchorPanesgrid[i][j].getChildren().get(0)).getGlyphName().equals(((FontAwesomeIconView)anchorPanesgrid[i][j +2].getChildren().get(0)).getGlyphName())) {
+                                if(anchorPanesgrid[i][j + 1].getChildren().isEmpty()) {
                                     return anchorPanesgrid[i][j + 1];
                                 }
                             }
-                        }if (i == 0) {
-                            if ((anchorPanesgrid[i + 1][j].getChildren().isEmpty()) && !(anchorPanesgrid[i + 2][j].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i + 2][j].getChildren().get(0);
-                                if(fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())){
-                                    return anchorPanesgrid[i + 1][j];
-                                }
-                            }
-                        }if (j == 2) {
-                            if ((anchorPanesgrid[i][j - 1].getChildren().isEmpty()) && !(anchorPanesgrid[i][j - 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i][j - 2].getChildren().get(0);
-                                if(fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())){
-                                    return anchorPanesgrid[i][j - 1];
-                                }
-                            }
-                        }if (i == 2) {
-                            if ((anchorPanesgrid[i - 1][j].getChildren().isEmpty()) && !(anchorPanesgrid[i - 2][j].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i - 2][j].getChildren().get(0);
-                                if(fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())){
-                                    return anchorPanesgrid[i - 1][j];
-                                }
-                            }
-                        }
-                    }
-                    else {
-                        if (i == 0 && j == 0) {
-                            if ((anchorPanesgrid[i + 1][j + 1].getChildren().isEmpty()) && !(anchorPanesgrid[i + 2][j + 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i + 2][j + 2].getChildren().get(0);
-                                if (fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())) {
-                                    return anchorPanesgrid[i + 1][j + 1];
-                                }
-                            }
-                        }
-                        if (i == 2 && j == 0) {
-                            if ((anchorPanesgrid[i - 1][j + 1].getChildren().isEmpty()) && !(anchorPanesgrid[i - 2][j + 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i - 2][j + 2].getChildren().get(0);
-                                if (fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())) {
-                                    return anchorPanesgrid[i - 1][j + 1];
-                                }
-                            }
-                        }
-                        if (i == 0 && j == 2) {
-                            if ((anchorPanesgrid[i + 1][j - 1].getChildren().isEmpty()) && !(anchorPanesgrid[i + 2][j - 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i + 2][j - 2].getChildren().get(0);
-                                if (fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())) {
-                                    return anchorPanesgrid[i + 1][j - 1];
-                                }
-                            }
-                        }if (i == 2 && j == 2) {
-                            if ((anchorPanesgrid[i - 1][j - 1].getChildren().isEmpty()) && !(anchorPanesgrid[i - 2][j - 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i - 2][j - 2].getChildren().get(0);
-                                if(fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())){
-                                    return anchorPanesgrid[i - 1][j - 1];
-                                }
-                            }
-                        }if (j == 0) {
-                            if ((anchorPanesgrid[i][j + 1].getChildren().isEmpty()) && !(anchorPanesgrid[i][j + 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i][j + 2].getChildren().get(0);
-                                if (fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())) {
-                                    return anchorPanesgrid[i][j + 1];
-                                }
-                            }
-                        }
-                        if (i == 0) {
-                            if ((anchorPanesgrid[i + 1][j].getChildren().isEmpty()) && !(anchorPanesgrid[i + 2][j].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i + 2][j].getChildren().get(0);
-                                if (fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())) {
-                                    return anchorPanesgrid[i + 1][j];
-                                }
-                            }
-                        }if (j == 2) {
-                            if ((anchorPanesgrid[i][j - 1].getChildren().isEmpty()) && !(anchorPanesgrid[i][j - 2].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i][j - 2].getChildren().get(0);
-                                if (fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())) {
+                        }if (j == 1 && !anchorPanesgrid[i][j + 1].getChildren().isEmpty()) {//row at start
+                            if (((FontAwesomeIconView)anchorPanesgrid[i][j].getChildren().get(0)).getGlyphName().equals(((FontAwesomeIconView)anchorPanesgrid[i][j + 1].getChildren().get(0)).getGlyphName())) {
+                                if(anchorPanesgrid[i][j - 1].getChildren().isEmpty()) {
                                     return anchorPanesgrid[i][j - 1];
                                 }
                             }
                         }
-                        if (i == 2) {
-                            if ((anchorPanesgrid[i - 1][j].getChildren().isEmpty()) && !(anchorPanesgrid[i - 2][j].getChildren().isEmpty())) {
-                                fontAwesomeIconView1 = (FontAwesomeIconView) anchorPanesgrid[i - 2][j].getChildren().get(0);
-                                if (fontAwesomeIconView.getGlyphName().equals(fontAwesomeIconView1.getGlyphName())) {
+                        if (i == 0 && !anchorPanesgrid[i + 1][j].getChildren().isEmpty()) {//column at end
+                            if (((FontAwesomeIconView)anchorPanesgrid[i][j].getChildren().get(0)).getGlyphName().equals(((FontAwesomeIconView)anchorPanesgrid[i + 1][j].getChildren().get(0)).getGlyphName())) {
+                                if(anchorPanesgrid[i + 1][j].getChildren().isEmpty()) {
+                                    return anchorPanesgrid[i + 1][j];
+                                }
+                            }
+                        }if (i == 0 && !anchorPanesgrid[i + 2][j].getChildren().isEmpty()) {//column at middle
+                            if (((FontAwesomeIconView)anchorPanesgrid[i][j].getChildren().get(0)).getGlyphName().equals(((FontAwesomeIconView)anchorPanesgrid[i + 2][j].getChildren().get(0)).getGlyphName())) {
+                                if(anchorPanesgrid[i + 1][j].getChildren().isEmpty()) {
+                                    return anchorPanesgrid[i + 1][j];
+                                }
+                            }
+                        }if (i == 1 && !anchorPanesgrid[i + 1][j].getChildren().isEmpty()) {//column at start
+                            if (((FontAwesomeIconView)anchorPanesgrid[i][j].getChildren().get(0)).getGlyphName().equals(((FontAwesomeIconView)anchorPanesgrid[i + 1][j].getChildren().get(0)).getGlyphName())) {
+                                if(anchorPanesgrid[i - 1][j].getChildren().isEmpty()) {
                                     return anchorPanesgrid[i - 1][j];
                                 }
                             }
