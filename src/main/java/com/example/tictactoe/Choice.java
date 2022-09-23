@@ -20,7 +20,7 @@ public class Choice {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("hello-view.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+            Scene scene = new Scene(fxmlLoader.load(), 600, 750);
             Game helloController = fxmlLoader.getController();
             Button botao = (Button)actionEvent.getSource();
             String playericon = botao.getText();

@@ -3,6 +3,8 @@ package com.example.tictactoe;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -17,8 +19,14 @@ import java.util.Random;
 public class Game {
     @FXML
     private AnchorPane AnchorPane00, AnchorPane01, AnchorPane02, AnchorPane10, AnchorPane11, AnchorPane12, AnchorPane20, AnchorPane21, AnchorPane22;
+    @FXML
+    private Label placar;
+    @FXML
+    private Button restartButton;
+    int x=0, o=0;  //score for x and o
     String Player, Bot;
     Color playercolor, botcolor;
+
 
     /**
      * This Function sets player icon by passing a String with icon name
@@ -67,10 +75,13 @@ public class Game {
                     anchorPane.setOnMouseClicked(null);
                 }
                 if(Player.equals("TIMES")){
-                    System.out.println("Vitória do X");
+                    x+=1;
+                    placar.setText(x+" X "+o);
                 }else{
-                    System.out.println("Vitória do circulo");
+                    o+=1;
+                    placar.setText(x+" X "+o);
                 }
+                restartButton.setDisable(false);
             }else{
                 for (AnchorPane anchorPane: anchorPanes) {
                     if(anchorPane.getChildren().isEmpty()){
@@ -78,7 +89,7 @@ public class Game {
                         return;
                     }
                 }
-                System.out.println("EMPATE");
+                restartButton.setDisable(false);
             }
         }
 
@@ -96,10 +107,10 @@ public class Game {
         player.setSize("100");
         player.setGlyphName(icon);
         player.setFill(color);
-        AnchorPane.setBottomAnchor(player, 0.0);
-        AnchorPane.setTopAnchor(player, 0.0);
-        AnchorPane.setLeftAnchor(player, 0.0);
-        AnchorPane.setRightAnchor(player, 0.0);
+        AnchorPane.setBottomAnchor(player, 45.0);
+        AnchorPane.setTopAnchor(player, 45.0);
+        AnchorPane.setLeftAnchor(player, 45.0);
+        AnchorPane.setRightAnchor(player, 45.0);
         return player;
     }
 
@@ -128,16 +139,18 @@ public class Game {
                     anchorPane.setOnMouseClicked(null);
                 }
                 if (Player.equals("TIMES")) {
-                    System.out.println("Vitória do circulo");
+                    o+=1;
+                    placar.setText(x+" X "+o);
                 } else {
-                    System.out.println("Vitória do X");
+                    x+=1;
+                    placar.setText(x+" X "+o);
                 }
+                restartButton.setDisable(false);
             }
         }else{
             Random random = new Random();
             int rad = random.nextInt(possibilites.size());
             possibilites.get(rad).getChildren().add(InitializeIcon(Bot, botcolor));
-            System.out.println("RANDOM");
         }
 
     }
@@ -212,8 +225,8 @@ public class Game {
                         }
                         if (i == 0 && !anchorPanesgrid[i + 1][j].getChildren().isEmpty()) {//column at end
                             if (((FontAwesomeIconView)anchorPanesgrid[i][j].getChildren().get(0)).getGlyphName().equals(((FontAwesomeIconView)anchorPanesgrid[i + 1][j].getChildren().get(0)).getGlyphName())) {
-                                if(anchorPanesgrid[i + 1][j].getChildren().isEmpty()) {
-                                    return anchorPanesgrid[i + 1][j];
+                                if(anchorPanesgrid[i + 2][j].getChildren().isEmpty()) {
+                                    return anchorPanesgrid[i + 2][j];
                                 }
                             }
                         }if (i == 0 && !anchorPanesgrid[i + 2][j].getChildren().isEmpty()) {//column at middle
@@ -288,4 +301,16 @@ public class Game {
         return false;
     }
 
+    public void onRestart() {
+        AnchorPane[][] anchorPanesgrid = {{AnchorPane00, AnchorPane10, AnchorPane20}, {AnchorPane01, AnchorPane11, AnchorPane21}, {AnchorPane02, AnchorPane12, AnchorPane22}};
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (!anchorPanesgrid[i][j].getChildren().isEmpty()){
+                    anchorPanesgrid[i][j].getChildren().remove(0);
+                }
+                anchorPanesgrid[i][j].setOnMouseClicked(this::onMouseClicked);
+            }
+        }
+        restartButton.setDisable(true);
+    }
 }

@@ -1,71 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-
-<GridPane fx:id="table" alignment="CENTER" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tictactoe.Game">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-  </rowConstraints>
-   <cursor>
-      <Cursor fx:constant="HAND" />
-   </cursor>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="600.0" style="-fx-border-color: #000000; -fx-border-width: 5;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tictactoe.Game">
    <children>
-      <AnchorPane fx:id="AnchorPane00" onMouseClicked="#onMouseClicked" prefHeight="200.0" prefWidth="200.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER" GridPane.vgrow="SOMETIMES">
+      <GridPane fx:id="table" alignment="CENTER" gridLinesVisible="true" layoutY="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
-      </AnchorPane>
-      <AnchorPane fx:id="AnchorPane10" onMouseClicked="#onMouseClicked" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </AnchorPane>
-      <AnchorPane fx:id="AnchorPane20" onMouseClicked="#onMouseClicked" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </AnchorPane>
-      <AnchorPane fx:id="AnchorPane01" onMouseClicked="#onMouseClicked" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </AnchorPane>
-      <AnchorPane fx:id="AnchorPane11" onMouseClicked="#onMouseClicked" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </AnchorPane>
-      <AnchorPane fx:id="AnchorPane21" onMouseClicked="#onMouseClicked" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </AnchorPane>
-      <AnchorPane fx:id="AnchorPane02" onMouseClicked="#onMouseClicked" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </AnchorPane>
-      <AnchorPane fx:id="AnchorPane12" onMouseClicked="#onMouseClicked" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </AnchorPane>
-      <AnchorPane fx:id="AnchorPane22" onMouseClicked="#onMouseClicked" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </AnchorPane>
+         <children>
+            <AnchorPane fx:id="AnchorPane00" onMouseClicked="#onMouseClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #000000; -fx-border-width: 2;" GridPane.halignment="CENTER" GridPane.valignment="CENTER" GridPane.vgrow="SOMETIMES">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+            <AnchorPane fx:id="AnchorPane10" onMouseClicked="#onMouseClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #000000; -fx-border-width: 2;" GridPane.columnIndex="1">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+            <AnchorPane fx:id="AnchorPane20" onMouseClicked="#onMouseClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #000000; -fx-border-width: 2;" GridPane.columnIndex="2">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+            <AnchorPane fx:id="AnchorPane01" onMouseClicked="#onMouseClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #000000; -fx-border-width: 2;" GridPane.rowIndex="1">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+            <AnchorPane fx:id="AnchorPane11" onMouseClicked="#onMouseClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #000000; -fx-border-width: 2;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+            <AnchorPane fx:id="AnchorPane21" onMouseClicked="#onMouseClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #000000; -fx-border-width: 2;" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+            <AnchorPane fx:id="AnchorPane02" onMouseClicked="#onMouseClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #000000; -fx-border-width: 2;" GridPane.rowIndex="2">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+            <AnchorPane fx:id="AnchorPane12" onMouseClicked="#onMouseClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #000000; -fx-border-width: 2;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+            <AnchorPane fx:id="AnchorPane22" onMouseClicked="#onMouseClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #000000; -fx-border-width: 2;" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+         </children>
+      </GridPane>
+      <Label layoutX="198.0" layoutY="4.0" text="TIC-TAC-TOE">
+         <font>
+            <Font name="Impact" size="42.0" />
+         </font>
+      </Label>
+      <FontAwesomeIconView fill="BLUE" glyphName="TIMES" layoutX="70.0" layoutY="68.0" size="70" text="" />
+      <FontAwesomeIconView fill="RED" glyphName="CIRCLE_ALT" layoutX="472.0" layoutY="66.0" size="70" />
+      <Label fx:id="placar" layoutX="280.0" layoutY="57.0" text="0 x 0">
+         <font>
+            <Font name="Impact" size="21.0" />
+         </font>
+      </Label>
+      <Button fx:id="restartButton" disable="true" layoutX="496.0" layoutY="705.0" mnemonicParsing="false" onAction="#onRestart" text="Restart">
+         <font>
+            <Font name="Impact" size="18.0" />
+         </font>
+      </Button>
    </children>
-</GridPane>
+</AnchorPane>
