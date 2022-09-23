@@ -2,16 +2,13 @@ package com.example.tictactoe;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.ResourceBundle;
 
 /**
  * Game class, this class is where everything happens
@@ -25,7 +22,7 @@ public class Game {
 
     /**
      * This Function sets player icon by passing a String with icon name
-     * @param player
+     * @param player String in which defines what is the player's icon
      */
     public void setPlayerIcon(String player){
         if(player.equals("TIMES")){
@@ -40,7 +37,7 @@ public class Game {
 
     /**
      * This Function sets player icon by passing a color value
-     * @param color
+     * @param color Color in which defines what is the player's colors
      */
 
     public void setPlayerColor(Color color) {
@@ -57,21 +54,13 @@ public class Game {
      * This Fuction happens when the player clicks somewhere in the screen, its check if where the player clicked has alredy
      * an icon, if so it doesn't do anything otherwise it puts the player icon where the player clicked, than check if the player won
      * otherwise runs the ComputerPlay()
-     * @param mouseEvent
+     * @param mouseEvent MouseEvent and cast as an AnchorPane
      */
     public void onMouseClicked(MouseEvent mouseEvent) {
         Node source = (Node) mouseEvent.getSource();
         AnchorPane quadrante = (AnchorPane) source;
         if (quadrante.getChildren().isEmpty()) {
-            FontAwesomeIconView player = new FontAwesomeIconView();
-            player.setSize("100");
-            player.setGlyphName(Player);
-            player.setFill(playercolor);
-            AnchorPane.setBottomAnchor(player, 0.0);
-            AnchorPane.setTopAnchor(player, 0.0);
-            AnchorPane.setLeftAnchor(player, 0.0);
-            AnchorPane.setRightAnchor(player, 0.0);
-            quadrante.getChildren().add(player);
+            quadrante.getChildren().add(InitializeIcon(Player, playercolor));
             AnchorPane[] anchorPanes = {AnchorPane00, AnchorPane01, AnchorPane02, AnchorPane10, AnchorPane11, AnchorPane12, AnchorPane20, AnchorPane21, AnchorPane22};
             if(CheckWin()){
                 for (AnchorPane anchorPane :anchorPanes) {
@@ -90,10 +79,28 @@ public class Game {
                     }
                 }
                 System.out.println("EMPATE");
-                return;
             }
         }
 
+    }
+
+    /**
+     * This function is just for redundant usage of the same code, it initializes a FontAwesomeIconView for the player
+     * and bot.
+     * @param icon gets the player or bot icon's
+     * @param color get the player or bot color's
+     * @return return a new FontAwesomeIconView
+     */
+    private FontAwesomeIconView InitializeIcon(String icon, Color color) {
+        FontAwesomeIconView player = new FontAwesomeIconView();
+        player.setSize("100");
+        player.setGlyphName(icon);
+        player.setFill(color);
+        AnchorPane.setBottomAnchor(player, 0.0);
+        AnchorPane.setTopAnchor(player, 0.0);
+        AnchorPane.setLeftAnchor(player, 0.0);
+        AnchorPane.setRightAnchor(player, 0.0);
+        return player;
     }
 
     /**
@@ -110,20 +117,12 @@ public class Game {
                     possibilites.add(anchorPane);
             }
         }
-        FontAwesomeIconView bot=new FontAwesomeIconView();
-        bot.setSize("100");
-        bot.setGlyphName(Bot);
-        bot.setFill(botcolor);
-        AnchorPane.setBottomAnchor(bot, 0.0);
-        AnchorPane.setTopAnchor(bot, 0.0);
-        AnchorPane.setLeftAnchor(bot, 0.0);
-        AnchorPane.setRightAnchor(bot, 0.0);
         AnchorPane bestPlay =  CheckBestPlay(Bot);
         if(bestPlay==null){
             bestPlay = CheckBestPlay(Player);
         }
         if(bestPlay!=null) {
-            bestPlay.getChildren().add(bot);
+            bestPlay.getChildren().add(InitializeIcon(Bot, botcolor));
             if (CheckWin()) {
                 for (AnchorPane anchorPane : anchorPanes) {
                     anchorPane.setOnMouseClicked(null);
@@ -133,13 +132,12 @@ public class Game {
                 } else {
                     System.out.println("Vitória do X");
                 }
-                return;
             }
         }else{
-                Random random = new Random();
-                int rad = random.nextInt(possibilites.size());
-                possibilites.get(rad).getChildren().add(bot);
-                System.out.println("RANDOM");
+            Random random = new Random();
+            int rad = random.nextInt(possibilites.size());
+            possibilites.get(rad).getChildren().add(InitializeIcon(Bot, botcolor));
+            System.out.println("RANDOM");
         }
 
     }
@@ -157,37 +155,37 @@ public class Game {
             for (int j = 0; j < 3; j++) { //column
                 if(!anchorPanesgrid[i][j].getChildren().isEmpty()){
                     if(((FontAwesomeIconView)anchorPanesgrid[i][j].getChildren().get(0)).getGlyphName().equals(text)) {
-                        if(i==0 && j==0 && !anchorPanesgrid[i+1][j+1].getChildren().isEmpty()){//diagonal from up to down end
+                        if(i==0 && j==0 && !anchorPanesgrid[i+1][j+1].getChildren().isEmpty()){//diagonal from up to down, end
                             if (((FontAwesomeIconView)anchorPanesgrid[i][j].getChildren().get(0)).getGlyphName().equals(((FontAwesomeIconView)anchorPanesgrid[i + 1][j + 1].getChildren().get(0)).getGlyphName())) {
                                 if (anchorPanesgrid[i + 2][j + 2].getChildren().isEmpty()) {
                                     return anchorPanesgrid[i + 2][j + 2];
                                 }
                             }
-                        }if ((i == 0 && j == 0 && !anchorPanesgrid[i + 2][j + 2].getChildren().isEmpty())) {//diagonal from up to down middle
+                        }if ((i == 0 && j == 0 && !anchorPanesgrid[i + 2][j + 2].getChildren().isEmpty())) {//diagonal from up to down, middle
                             if (((FontAwesomeIconView)anchorPanesgrid[i][j].getChildren().get(0)).getGlyphName().equals(((FontAwesomeIconView)anchorPanesgrid[i + 2][j + 2].getChildren().get(0)).getGlyphName())) {
                                 if( anchorPanesgrid[i + 1][j + 1].getChildren().isEmpty()) {
                                     return anchorPanesgrid[i + 1][j + 1];
                                 }
                             }
-                        }if ((i == 1 && j == 1 && !anchorPanesgrid[i + 1][j + 1].getChildren().isEmpty())) {//diagonal from up to down start
+                        }if ((i == 1 && j == 1 && !anchorPanesgrid[i + 1][j + 1].getChildren().isEmpty())) {//diagonal from up to down, start
                             if (((FontAwesomeIconView)anchorPanesgrid[i][j].getChildren().get(0)).getGlyphName().equals(((FontAwesomeIconView)anchorPanesgrid[i + 1][j + 1].getChildren().get(0)).getGlyphName())) {
                                 if(anchorPanesgrid[i - 1][j - 1].getChildren().isEmpty()) {
                                     return anchorPanesgrid[i - 1][j - 1];
                                 }
                             }
-                        }if(i==2 && j==0 && !anchorPanesgrid[i-1][j+1].getChildren().isEmpty()){//diagonal from down to up end
+                        }if(i==2 && j==0 && !anchorPanesgrid[i-1][j+1].getChildren().isEmpty()){//diagonal from down to up, end
                             if (((FontAwesomeIconView)anchorPanesgrid[i][j].getChildren().get(0)).getGlyphName().equals(((FontAwesomeIconView)anchorPanesgrid[i - 1][j + 1].getChildren().get(0)).getGlyphName())) {
                                 if(anchorPanesgrid[i - 2][j + 2].getChildren().isEmpty()) {
                                     return anchorPanesgrid[i - 2][j + 2];
                                 }
                             }
-                        }if ((i == 2 && j == 0 && !anchorPanesgrid[i - 2][j + 2].getChildren().isEmpty())) {//diagonal from down to up middle
+                        }if ((i == 2 && j == 0 && !anchorPanesgrid[i - 2][j + 2].getChildren().isEmpty())) {//diagonal from down to up, middle
                             if (((FontAwesomeIconView)anchorPanesgrid[i][j].getChildren().get(0)).getGlyphName().equals(((FontAwesomeIconView)anchorPanesgrid[i - 2][j + 2].getChildren().get(0)).getGlyphName())) {
                                 if(anchorPanesgrid[i - 1][j + 1].getChildren().isEmpty()) {
                                     return anchorPanesgrid[i - 1][j + 1];
                                 }
                             }
-                        }if ((i == 1 && j == 1 && !anchorPanesgrid[i - 1][j + 1].getChildren().isEmpty())) {//diagonal from down to up start
+                        }if ((i == 1 && j == 1 && !anchorPanesgrid[i - 1][j + 1].getChildren().isEmpty())) {//diagonal from down to up, start
                             if (((FontAwesomeIconView)anchorPanesgrid[i][j].getChildren().get(0)).getGlyphName().equals(((FontAwesomeIconView)anchorPanesgrid[i - 1][j + 1].getChildren().get(0)).getGlyphName())) {
                                 if(anchorPanesgrid[i + 1][j - 1].getChildren().isEmpty()) {
                                     return anchorPanesgrid[i + 1][j - 1];
